@@ -33,11 +33,11 @@
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:var(--fs-body);line-height:var(--lh-body)}
-.wrap{max-width:1200px;margin:0 auto;padding:0 32px 96px}
+.wrap{max-width:1400px;margin:0 auto;padding:0 32px 96px}
 p,li{max-width:var(--measure)}
 h1,h2,h3{line-height:var(--lh-head);text-wrap:balance;margin:0 0 .4em}
 h1{font-family:var(--font-display);font-size:var(--fs-h1);padding-top:48px}
-h2{font-family:var(--font-display);font-size:var(--fs-h2);margin-top:56px;border-top:2px solid var(--ink);padding-top:20px}
+h2{font-family:var(--font-display);font-size:var(--fs-h2);margin-top:56px;border-top:2px solid var(--ink);padding-top:20px;scroll-margin-top:24px}
 .lede{font-size:var(--fs-lede);color:var(--muted);max-width:var(--measure-wide)}
 .notice{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px 26px;margin:24px 0;font-size:var(--fs-small);line-height:var(--lh-small);max-width:var(--measure-wide)}
 .notice.warn{background:var(--warn-tint);border-color:var(--warn)}
@@ -50,9 +50,69 @@ code{font-family:var(--font-mono);font-size:.87em;background:var(--accent-tint);
 .term-card .zh{color:var(--muted);font-size:var(--fs-small)}
 .term-card .explain{margin-top:6px;font-size:var(--fs-small);line-height:var(--lh-small);color:var(--ink);max-width:none}
 .micro{font-size:var(--fs-micro);color:var(--muted)}
+section{scroll-margin-top:24px}
+
+/* ---------- 版面：主內容 + 右側大綱 ---------- */
+.layout{display:grid;grid-template-columns:1fr 280px;gap:48px;align-items:start}
+.main{min-width:0}
+.toc{
+  position:sticky;top:28px;
+  background:var(--surface);border:1px solid var(--line);border-radius:8px;
+  padding:22px 22px 26px;
+}
+.toc h2{
+  font-family:var(--font-body);font-size:var(--fs-small);font-weight:700;
+  border-top:none;margin:0 0 16px;padding-top:0;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.06em;
+}
+
+/* 搜尋欄：真正可操作的 text input，不是裝飾用的 div */
+.search-box{margin-bottom:22px}
+.search-box label{
+  display:block;font-size:var(--fs-micro);color:var(--muted);margin-bottom:6px;
+}
+.search-box input[type="search"]{
+  width:100%;font-family:var(--font-body);font-size:var(--fs-small);
+  padding:10px 14px;border:1px solid var(--line);border-radius:6px;
+  background:var(--bg);color:var(--ink);line-height:1.4;
+}
+.search-box input[type="search"]:focus-visible{
+  outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent);
+}
+
+/* 大綱按鈕：原生 <button>，鍵盤可達、有明顯焦點樣式 */
+.toc nav{display:flex;flex-direction:column;gap:8px}
+.toc-btn{
+  display:block;width:100%;text-align:left;
+  font-family:var(--font-body);font-size:var(--fs-small);color:var(--ink);
+  background:var(--bg);border:1px solid var(--line);border-radius:6px;
+  padding:10px 14px;cursor:pointer;line-height:1.4;
+}
+.toc-btn:hover{background:var(--accent-tint);border-color:var(--accent)}
+.toc-btn:focus-visible{
+  outline:3px solid var(--accent);outline-offset:2px;
+  background:var(--accent-tint);border-color:var(--accent);
+}
+.toc-btn .count{float:right;color:var(--muted);font-size:var(--fs-micro)}
+
+#no-results{
+  display:none;padding:20px 24px;background:var(--surface);
+  border:1px dashed var(--line);border-radius:6px;color:var(--muted);
+  font-size:var(--fs-small);margin:20px 0;max-width:var(--measure-wide);
+}
+#no-results.show{display:block}
+
+@media (max-width:980px){
+  .layout{grid-template-columns:1fr}
+  .toc{position:static;order:-1}
+  .toc nav{flex-direction:row;flex-wrap:wrap}
+  .toc-btn{width:auto}
+}
+
 @media print{
   body{font-size:12pt;line-height:1.5;background:#fff;color:#000}
   h1{font-size:24pt}h2{font-size:18pt}
+  .toc{display:none}
 }
 </style>
 </head>
@@ -62,7 +122,26 @@ code{font-family:var(--font-mono);font-size:.87em;background:var(--accent-tint);
 <h1>軟體工程術語表<br><span style="font-size:.6em;color:var(--muted)">去敏公版</span></h1>
 <p class="lede">給剛開始接觸 Git / CI / 部署 / 程式碼品質工具的人查用的通用術語表。</p>
 
+<div class="layout">
 
+<aside class="toc" aria-label="詞條搜尋與大綱">
+  <div class="search-box">
+    <label for="term-search">搜尋詞條</label>
+    <input type="search" id="term-search" aria-label="搜尋詞條（依名稱或說明文字）" placeholder="輸入關鍵字，例如 CI、canary…" autocomplete="off">
+  </div>
+  <h2>大綱</h2>
+  <nav aria-label="分類大綱">
+    <button type="button" class="toc-btn" data-target="sec-git">Git 基礎<span class="count">12</span></button>
+    <button type="button" class="toc-btn" data-target="sec-ci">CI 與自動化<span class="count">20</span></button>
+    <button type="button" class="toc-btn" data-target="sec-deploy">部署與雲端<span class="count">11</span></button>
+    <button type="button" class="toc-btn" data-target="sec-quality">程式碼品質與前端<span class="count">5</span></button>
+    <button type="button" class="toc-btn" data-target="sec-abbr">常見縮寫<span class="count">2</span></button>
+  </nav>
+</aside>
+
+<div class="main">
+
+<section id="sec-git">
 <h2>Git 基礎</h2>
 <div class="term-grid">
 <div class="term-card"><div class="head"><code>Repo</code><span class="zh">儲存庫</span></div><p class="explain">Git 中存放程式碼與版控紀錄的專案單位。</p></div>
@@ -78,7 +157,9 @@ code{font-family:var(--font-mono);font-size:.87em;background:var(--accent-tint);
 <div class="term-card"><div class="head"><code>--no-verify</code><span class="zh">跳過鉤子</span></div><p class="explain">Git 參數，可跳過 pre-commit 與 commit-msg 鉤子，使用時應在提交說明中註明原因。</p></div>
 <div class="term-card"><div class="head"><code>.gitignore</code><span class="zh">忽略清單</span></div><p class="explain">告訴 Git 哪些檔案不該提交，例如憑證檔。</p></div>
 </div>
+</section>
 
+<section id="sec-ci">
 <h2>CI 與自動化</h2>
 <div class="term-grid">
 <div class="term-card"><div class="head"><code>.github</code><span class="zh">.github 目錄</span></div><p class="explain">存放 GitHub Actions workflow 等設定檔的隱藏目錄。</p></div>
@@ -102,7 +183,9 @@ code{font-family:var(--font-mono);font-size:.87em;background:var(--accent-tint);
 <div class="term-card"><div class="head"><code>分支保護規則</code><span class="zh">保護與審批規則</span></div><p class="explain">限制分支合併條件、以及部署環境需人工審核的設定。</p></div>
 <div class="term-card"><div class="head"><code>gh</code><span class="zh">GitHub CLI</span></div><p class="explain">GitHub 官方命令列工具。</p></div>
 </div>
+</section>
 
+<section id="sec-deploy">
 <h2>部署與雲端</h2>
 <div class="term-grid">
 <div class="term-card"><div class="head"><code>Workload Identity Federation</code><span class="zh">工作負載身份聯邦</span></div><p class="explain">用短期令牌取代長期金鑰，讓 CI 安全存取雲端服務的機制。</p></div>
@@ -117,7 +200,9 @@ code{font-family:var(--font-mono);font-size:.87em;background:var(--accent-tint);
 <div class="term-card"><div class="head"><code>煙霧測試</code><span class="zh">Smoke Test</span></div><p class="explain">部署後快速驗證服務是否存活的基本測試。</p></div>
 <div class="term-card"><div class="head"><code>401 / 404 / 410</code><span class="zh">HTTP 狀態碼</span></div><p class="explain">401 未授權、404 找不到、410 已永久移除。</p></div>
 </div>
+</section>
 
+<section id="sec-quality">
 <h2>程式碼品質與前端</h2>
 <div class="term-grid">
 <div class="term-card"><div class="head"><code>AST</code><span class="zh">抽象語法樹</span></div><p class="explain">解析程式碼結構、用於靜態分析的樹狀資料結構。</p></div>
@@ -126,15 +211,59 @@ code{font-family:var(--font-mono);font-size:.87em;background:var(--accent-tint);
 <div class="term-card"><div class="head"><code>aria-label / WCAG AA</code><span class="zh">無障礙標準</span></div><p class="explain">網頁無障礙屬性標籤、跳過導覽連結，以及 AA 級無障礙合規標準。</p></div>
 <div class="term-card"><div class="head"><code>bearer token</code><span class="zh">持有者令牌</span></div><p class="explain">API 認證用的令牌，通常放在 HTTP Header 中傳遞。</p></div>
 </div>
+</section>
 
+<section id="sec-abbr">
 <h2>常見縮寫</h2>
 <div class="term-grid">
 <div class="term-card"><div class="head"><code>CRM</code><span class="zh">客戶關係管理系統</span></div><p class="explain">Customer Relationship Management，管理客戶互動與銷售流程的系統類型。</p></div>
 <div class="term-card"><div class="head"><code>ERP</code><span class="zh">企業資源規劃系統</span></div><p class="explain">Enterprise Resource Planning，整合財務、人資、供應鏈等企業流程的系統類型。</p></div>
 </div>
+</section>
+
+<p id="no-results">沒有符合的詞條，換個關鍵字試試。</p>
 
 <p class="micro" style="margin-top:60px">共 50 個通用詞條（原始檔案 86 個，移除 36 個涉及特定公司資料或資安細節的詞條）。</p>
 
 </div>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var buttons = document.querySelectorAll('.toc-btn');
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = document.getElementById(btn.getAttribute('data-target'));
+      if(target){ target.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+
+  var input = document.getElementById('term-search');
+  var sections = document.querySelectorAll('section[id]');
+  var noResults = document.getElementById('no-results');
+
+  function normalize(s){ return (s || '').toLowerCase(); }
+
+  function applyFilter(){
+    var q = normalize(input.value.trim());
+    var totalVisible = 0;
+    sections.forEach(function(sec){
+      var sectionHasMatch = false;
+      sec.querySelectorAll('.term-card').forEach(function(card){
+        var match = !q || normalize(card.textContent).indexOf(q) !== -1;
+        card.hidden = !match;
+        if(match){ sectionHasMatch = true; totalVisible++; }
+      });
+      sec.hidden = !sectionHasMatch;
+    });
+    noResults.classList.toggle('show', totalVisible === 0);
+  }
+
+  input.addEventListener('input', applyFilter);
+})();
+</script>
+
 </body>
 </html>

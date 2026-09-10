@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>軟體工程術語表（去敏公版）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --fs-micro:16px; --fs-small:20px; --fs-body:23px; --fs-lede:26px;
+  --fs-h3:28px; --fs-h2:40px; --fs-h1:clamp(38px,5vw,64px);
+  --lh-body:1.68; --lh-small:1.6; --lh-head:1.18;
+  --measure:34em; --measure-wide:52em;
+  --bg:#faf9f6; --surface:#ffffff; --ink:#1c1a16; --muted:#6b6558;
+  --line:#e4ded2; --accent:#8a4a2f; --accent-tint:#f4e9df;
+  --warn:#a33a2f; --warn-tint:#f8e8e5;
+  --font-body:"Noto Sans TC",-apple-system,"Segoe UI","Microsoft JhengHei",sans-serif;
+  --font-display:"Noto Serif TC",Georgia,"Songti TC",serif;
+  --font-mono:"JetBrains Mono","Noto Sans TC",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#17140f; --surface:#221e17; --ink:#ede8de; --muted:#a89e8c;
+    --line:#39332a; --accent:#e0a17c; --accent-tint:#3a2a1f;
+    --warn:#e29187; --warn-tint:#3a1f1c;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17140f; --surface:#221e17; --ink:#ede8de; --muted:#a89e8c;
+  --line:#39332a; --accent:#e0a17c; --accent-tint:#3a2a1f;
+  --warn:#e29187; --warn-tint:#3a1f1c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:var(--fs-body);line-height:var(--lh-body)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px 96px}
+p,li{max-width:var(--measure)}
+h1,h2,h3{line-height:var(--lh-head);text-wrap:balance;margin:0 0 .4em}
+h1{font-family:var(--font-display);font-size:var(--fs-h1);padding-top:48px}
+h2{font-family:var(--font-display);font-size:var(--fs-h2);margin-top:56px;border-top:2px solid var(--ink);padding-top:20px}
+.lede{font-size:var(--fs-lede);color:var(--muted);max-width:var(--measure-wide)}
+.notice{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px 26px;margin:24px 0;font-size:var(--fs-small);line-height:var(--lh-small);max-width:var(--measure-wide)}
+.notice.warn{background:var(--warn-tint);border-color:var(--warn)}
+.notice b{color:var(--ink)}
+code{font-family:var(--font-mono);font-size:.87em;background:var(--accent-tint);padding:1px 7px;border-radius:3px}
+.term-grid{display:grid;gap:16px;margin:20px 0}
+.term-card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px 22px}
+.term-card .head{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.term-card code{font-size:var(--fs-small);font-weight:600}
+.term-card .zh{color:var(--muted);font-size:var(--fs-small)}
+.term-card .explain{margin-top:6px;font-size:var(--fs-small);line-height:var(--lh-small);color:var(--ink);max-width:none}
+.micro{font-size:var(--fs-micro);color:var(--muted)}
+@media print{
+  body{font-size:12pt;line-height:1.5;background:#fff;color:#000}
+  h1{font-size:24pt}h2{font-size:18pt}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>軟體工程術語表<br><span style="font-size:.6em;color:var(--muted)">去敏公版</span></h1>
+<p class="lede">給剛開始接觸 Git / CI / 部署 / 程式碼品質工具的人查用的通用術語表。</p>
+
+<div class="notice warn">
+<b>⚠️ 本頁是 <code>Ssdc-Glossary-V5-Final-Unfrozen.html</code> 的去敏版本</b><br>
+原始檔案共 86 個詞條，其中約 35 個涉及真實內部系統名稱、repo 名稱、組織名稱、內部檔案路徑，或直接描述了具體的資安落差細節——這些內容<b>已全部移除</b>，不是改寫或模糊化，是整條刪除。保留下來的 50 個詞條都是與任何公司無關的通用軟體工程詞彙，說明文字也重新改寫過，拿掉了所有「文中…」「本案例…」這類指向原始內部文件的措辭。
+</div>
+
+<div class="notice">
+原始檔案是一個公開存取（不需登入）的 GitHub Pages 網站。如果那個網站目前還開著，<b>建議優先處理下架或改為私有</b>，這件事的急迫性高於教材使用——去敏版只能防止「未來再被拿來當教材時外洩」，不能修補「現在就公開著」這件事本身。
+</div>
+
+<h2>Git 基礎</h2>
+<div class="term-grid">
+<div class="term-card"><div class="head"><code>Repo</code><span class="zh">儲存庫</span></div><p class="explain">Git 中存放程式碼與版控紀錄的專案單位。</p></div>
+<div class="term-card"><div class="head"><code>clone</code><span class="zh">複製儲存庫</span></div><p class="explain">將遠端 Repo 完整下載到本地的操作。</p></div>
+<div class="term-card"><div class="head"><code>blobless clone</code><span class="zh">無 blob 複製</span></div><p class="explain">Git clone 時不下載檔案內容（blob），只拿 commit 與樹結構的省流量方式。</p></div>
+<div class="term-card"><div class="head"><code>ls-remote</code><span class="zh">遠端列表指令</span></div><p class="explain">不需 clone 就能列出遠端分支與標籤的 Git 指令。</p></div>
+<div class="term-card"><div class="head"><code>refs</code><span class="zh">參照</span></div><p class="explain">Git 中指向 commit 的分支、標籤等指標的總稱。</p></div>
+<div class="term-card"><div class="head"><code>origin</code><span class="zh">遠端來源</span></div><p class="explain">Git 中預設遠端倉庫的名稱。</p></div>
+<div class="term-card"><div class="head"><code>main / master / develop</code><span class="zh">主分支名稱</span></div><p class="explain">Git 預設或開發用的主要分支名稱慣例。</p></div>
+<div class="term-card"><div class="head"><code>SHA</code><span class="zh">提交雜湊值</span></div><p class="explain">Git 中每次 commit 的唯一識別碼，通常以 40 字元十六進位表示。</p></div>
+<div class="term-card"><div class="head"><code>hook</code><span class="zh">鉤子</span></div><p class="explain">Git 在特定時機自動執行的腳本。</p></div>
+<div class="term-card"><div class="head"><code>husky</code><span class="zh">Git 鉤子管理工具</span></div><p class="explain">用來在本地掛載 <code>commit-msg</code> 等鉤子、強制檢查提交訊息格式的工具。</p></div>
+<div class="term-card"><div class="head"><code>--no-verify</code><span class="zh">跳過鉤子</span></div><p class="explain">Git 參數，可跳過 pre-commit 與 commit-msg 鉤子，使用時應在提交說明中註明原因。</p></div>
+<div class="term-card"><div class="head"><code>.gitignore</code><span class="zh">忽略清單</span></div><p class="explain">告訴 Git 哪些檔案不該提交，例如憑證檔。</p></div>
+</div>
+
+<h2>CI 與自動化</h2>
+<div class="term-grid">
+<div class="term-card"><div class="head"><code>.github</code><span class="zh">.github 目錄</span></div><p class="explain">存放 GitHub Actions workflow 等設定檔的隱藏目錄。</p></div>
+<div class="term-card"><div class="head"><code>workflow</code><span class="zh">工作流程</span></div><p class="explain">GitHub Actions 中定義自動化步驟的 YAML 檔。</p></div>
+<div class="term-card"><div class="head"><code>workflow_dispatch</code><span class="zh">手動觸發</span></div><p class="explain">允許在 GitHub 網頁上手動按鈕觸發 workflow 的觸發條件。</p></div>
+<div class="term-card"><div class="head"><code>push / pull_request / schedule</code><span class="zh">觸發條件</span></div><p class="explain">GitHub Actions 常見的觸發事件類型。</p></div>
+<div class="term-card"><div class="head"><code>CI</code><span class="zh">持續整合</span></div><p class="explain">程式碼提交後自動執行建置與測試的流程。</p></div>
+<div class="term-card"><div class="head"><code>pytest</code><span class="zh">Python 測試框架</span></div><p class="explain">Python 測試框架與其設定檔 <code>pytest.ini</code>。</p></div>
+<div class="term-card"><div class="head"><code>lint / eslint</code><span class="zh">程式碼風格檢查</span></div><p class="explain">檢查程式碼語法與風格是否符合規範的工具。</p></div>
+<div class="term-card"><div class="head"><code>安全掃描</code><span class="zh">Security Scan</span></div><p class="explain">掃描相依套件漏洞或機敏資訊的檢查。</p></div>
+<div class="term-card"><div class="head"><code>test script</code><span class="zh">測試指令</span></div><p class="explain"><code>package.json</code> 中定義的 <code>npm test</code> 等測試執行指令。</p></div>
+<div class="term-card"><div class="head"><code>check</code><span class="zh">檢查狀態</span></div><p class="explain">GitHub 上 PR 所需的 CI 檢查結果是否全綠。</p></div>
+<div class="term-card"><div class="head"><code>audit:production</code><span class="zh">生產環境稽核</span></div><p class="explain"><code>npm audit</code> 只檢查生產依賴的漏洞掃描指令。</p></div>
+<div class="term-card"><div class="head"><code>--runxfail</code><span class="zh">預期失敗參數</span></div><p class="explain">pytest 參數，使 <code>xfail</code> 標記不再生效，測試按一般測試執行與判定。</p></div>
+<div class="term-card"><div class="head"><code>compileall</code><span class="zh">Python 語法編譯檢查</span></div><p class="explain">Python 內建工具，將原始碼全部編譯以檢查語法錯誤。</p></div>
+<div class="term-card"><div class="head"><code>symlink 邊界檢查</code><span class="zh">符號連結安全檢查</span></div><p class="explain">檢查 symlink 是否指向倉庫外部的安全機制，避免任意檔案寫入。</p></div>
+<div class="term-card"><div class="head"><code>型別檢查</code><span class="zh">Type Checking</span></div><p class="explain">檢查變數型別是否正確的靜態分析。</p></div>
+<div class="term-card"><div class="head"><code>供應鏈稽核</code><span class="zh">Supply-chain Gate</span></div><p class="explain">檢查第三方套件是否安全的 CI 關卡。</p></div>
+<div class="term-card"><div class="head"><code>lock 檔</code><span class="zh">相依鎖定檔</span></div><p class="explain">記錄確切套件版本的檔案，例如 <code>package-lock.json</code>，用於重現一致的建置環境。</p></div>
+<div class="term-card"><div class="head"><code>Dependabot / secret scanning</code><span class="zh">GitHub 安全功能</span></div><p class="explain">自動更新依賴、掃描機密與程式碼漏洞的 GitHub 內建功能。</p></div>
+<div class="term-card"><div class="head"><code>分支保護規則</code><span class="zh">保護與審批規則</span></div><p class="explain">限制分支合併條件、以及部署環境需人工審核的設定。</p></div>
+<div class="term-card"><div class="head"><code>gh</code><span class="zh">GitHub CLI</span></div><p class="explain">GitHub 官方命令列工具。</p></div>
+</div>
+
+<h2>部署與雲端</h2>
+<div class="term-grid">
+<div class="term-card"><div class="head"><code>Workload Identity Federation</code><span class="zh">工作負載身份聯邦</span></div><p class="explain">用短期令牌取代長期金鑰，讓 CI 安全存取雲端服務的機制。</p></div>
+<div class="term-card"><div class="head"><code>SA JSON 金鑰</code><span class="zh">服務帳號金鑰</span></div><p class="explain">雲端服務帳號的長期憑證 JSON 檔，外洩風險較高，建議優先改用短期令牌機制。</p></div>
+<div class="term-card"><div class="head"><code>VM</code><span class="zh">虛擬機</span></div><p class="explain">部署目標的一種型態，服務跑在持續運作的虛擬主機上。</p></div>
+<div class="term-card"><div class="head"><code>:latest</code><span class="zh">最新標籤</span></div><p class="explain">Docker 映像常見的預設標籤名稱；是否真的指向最新版，取決於映像發布流程。</p></div>
+<div class="term-card"><div class="head"><code>checkout</code><span class="zh">檢出</span></div><p class="explain">CI 流程中將程式碼取出到執行環境的步驟。</p></div>
+<div class="term-card"><div class="head"><code>金絲雀部署</code><span class="zh">Canary</span></div><p class="explain">先以極小流量或零流量部署新版本、驗證通過後才逐步切換流量的部署策略。</p></div>
+<div class="term-card"><div class="head"><code>Artifact Registry</code><span class="zh">產物倉庫</span></div><p class="explain">雲端服務中存放建置產物（如 Docker 映像）的服務。</p></div>
+<div class="term-card"><div class="head"><code>gcloud</code><span class="zh">GCP 命令列工具</span></div><p class="explain">操作 Google Cloud 服務的命令列工具。</p></div>
+<div class="term-card"><div class="head"><code>套件漂移</code><span class="zh">Package Drift</span></div><p class="explain">比對新舊建置產物實際安裝的套件版本是否一致的檢查。</p></div>
+<div class="term-card"><div class="head"><code>煙霧測試</code><span class="zh">Smoke Test</span></div><p class="explain">部署後快速驗證服務是否存活的基本測試。</p></div>
+<div class="term-card"><div class="head"><code>401 / 404 / 410</code><span class="zh">HTTP 狀態碼</span></div><p class="explain">401 未授權、404 找不到、410 已永久移除。</p></div>
+</div>
+
+<h2>程式碼品質與前端</h2>
+<div class="term-grid">
+<div class="term-card"><div class="head"><code>AST</code><span class="zh">抽象語法樹</span></div><p class="explain">解析程式碼結構、用於靜態分析的樹狀資料結構。</p></div>
+<div class="term-card"><div class="head"><code>prop</code><span class="zh">屬性</span></div><p class="explain">前端框架（如 React）元件傳入的參數。</p></div>
+<div class="term-card"><div class="head"><code>Optimistic Update</code><span class="zh">樂觀更新</span></div><p class="explain">先假設操作會成功、立即更新畫面，再等待伺服器實際回應的互動模式。</p></div>
+<div class="term-card"><div class="head"><code>aria-label / WCAG AA</code><span class="zh">無障礙標準</span></div><p class="explain">網頁無障礙屬性標籤、跳過導覽連結，以及 AA 級無障礙合規標準。</p></div>
+<div class="term-card"><div class="head"><code>bearer token</code><span class="zh">持有者令牌</span></div><p class="explain">API 認證用的令牌，通常放在 HTTP Header 中傳遞。</p></div>
+</div>
+
+<h2>常見縮寫</h2>
+<div class="term-grid">
+<div class="term-card"><div class="head"><code>CRM</code><span class="zh">客戶關係管理系統</span></div><p class="explain">Customer Relationship Management，管理客戶互動與銷售流程的系統類型。</p></div>
+<div class="term-card"><div class="head"><code>ERP</code><span class="zh">企業資源規劃系統</span></div><p class="explain">Enterprise Resource Planning，整合財務、人資、供應鏈等企業流程的系統類型。</p></div>
+</div>
+
+<p class="micro" style="margin-top:60px">共 50 個通用詞條（原始檔案 86 個，移除 36 個涉及特定公司資料或資安細節的詞條）。</p>
+
+</div>
+</body>
+</html>
